@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Генератор варіантів</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Веб-додаток</p>
+          <h1>Генератор варіантів</h1>
+          <p class="subtitle">Завантажуйте списки, збирайте схему й отримуйте результат миттєво.</p>
+        </div>
+        <div class="hero-actions">
+          <input type="file" id="importInput" accept=".json" hidden />
+          <button class="btn btn-secondary" id="importBtn">Імпорт даних</button>
+          <button class="btn btn-secondary" id="exportBtn">Експорт даних</button>
+          <button class="btn btn-secondary" id="resetStorage">Очистити все</button>
+        </div>
+      </header>
+
+      <section class="card upload-card">
+        <div class="card-head">
+          <h2>Завантаження списків</h2>
+          <p>Drag & Drop або вручну. Формат: .txt</p>
+        </div>
+        <p class="hint">
+          Приклад рядка: <strong>Варіант</strong> або <strong>Варіант;Підпункт</strong>
+        </p>
+        <div class="upload-zone" id="dropZone">
+          <div class="upload-text">
+            <span class="upload-title">Drag & Drop файли сюди</span>
+            <span class="upload-sub">або натисніть кнопку</span>
+          </div>
+          <input type="file" id="fileInput" accept=".txt" multiple hidden />
+          <button class="btn btn-primary" id="uploadBtn">Завантажити файл</button>
+        </div>
+        <div class="lists" id="listsContainer"></div>
+      </section>
+
+      <section class="card fields-card">
+        <div class="card-head">
+          <div>
+            <h2>Конструктор полів</h2>
+            <p>Налаштовуйте послідовність генерації.</p>
+          </div>
+          <div class="field-actions">
+            <div class="instance-controls">
+              <select class="select" id="instanceSelect"></select>
+              <button class="btn btn-secondary" id="addInstance">+ Нова схема</button>
+              <button class="btn btn-secondary" id="cloneInstance">Клонувати</button>
+              <button class="btn btn-secondary" id="renameInstance">Перейменувати</button>
+              <button class="icon-btn" id="deleteInstance">Видалити</button>
+            </div>
+            <button class="btn btn-primary" id="addField">+ Додати поле</button>
+          </div>
+        </div>
+        <div class="fields" id="fieldsContainer"></div>
+      </section>
+
+      <section class="card generate-card">
+        <div class="card-head">
+          <div>
+            <h2>Генерація</h2>
+            <p>Результат формується послідовно, з урахуванням залежностей.</p>
+          </div>
+          <div class="generate-settings">
+            <div class="count-control">
+              <label for="variantCount">Кількість</label>
+              <input class="input" id="variantCount" type="number" min="1" max="50" value="1" />
+            </div>
+            <div class="toggle">
+              <input type="checkbox" id="singleLineToggle" />
+              <label for="singleLineToggle">Один рядок</label>
+            </div>
+          </div>
+        </div>
+        <div class="generate-actions">
+          <button class="btn btn-glow" id="generateBtn">Згенерувати</button>
+          <span class="hint" id="generateHint">Додайте хоча б одне поле з налаштуваннями.</span>
+        </div>
+        <div class="result" id="resultBox">
+          <h3>Результат</h3>
+          <pre id="resultOutput"></pre>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>
+          Авторство: <strong>Fulldroper</strong> ·
+          <a href="https://github.com/Fulldroper/" target="_blank" rel="noreferrer">GitHub</a>
+          · <a href="mailto:full_droper@pm.me">full_droper@pm.me</a>
+        </p>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
