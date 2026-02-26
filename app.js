@@ -4,7 +4,7 @@ const GA_MEASUREMENT_ID = "G-1DXE7GYS2M";
 const GA_DEBUG_PARAM = "gtag_debug";
 let gaDebugMode = null;
 
-function getGaDebugMode() {
+function isGaDebugMode() {
   if (gaDebugMode !== null) return gaDebugMode;
   gaDebugMode = new URLSearchParams(window.location.search).has(GA_DEBUG_PARAM);
   return gaDebugMode;
@@ -77,7 +77,7 @@ function loadGoogleAnalytics() {
   const initializeAnalytics = () => {
     if (window.gtagInitialized) return;
     gtag("js", new Date());
-    const config = getGaDebugMode() ? { debug_mode: true } : {};
+    const config = isGaDebugMode() ? { debug_mode: true } : {};
     gtag("config", GA_MEASUREMENT_ID, config);
     window.gtagInitialized = true;
   };
