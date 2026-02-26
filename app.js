@@ -69,7 +69,14 @@ function loadGoogleAnalytics() {
   const initializeAnalytics = () => {
     if (window.gtagInitialized) return;
     gtag("js", new Date());
-    gtag("config", GA_MEASUREMENT_ID);
+    const debugMode = new URLSearchParams(window.location.search).has(
+      "gtag_debug"
+    );
+    if (debugMode) {
+      gtag("config", GA_MEASUREMENT_ID, { debug_mode: true });
+    } else {
+      gtag("config", GA_MEASUREMENT_ID);
+    }
     window.gtagInitialized = true;
   };
 
