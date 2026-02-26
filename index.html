@@ -11,13 +11,9 @@
       rel="stylesheet"
     />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1DXE7GYS2M"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-1DXE7GYS2M');
     </script>
     <link rel="stylesheet" href="styles.css" />
       <script type="text/javascript">
@@ -122,6 +118,15 @@
     </div>
 
     <div class="toast" id="toast"></div>
+    <div class="consent-banner" id="consentBanner" role="dialog" aria-live="polite" aria-label="Згода на аналітику">
+      <div class="consent-text">
+        Ми використовуємо Google Analytics, щоб покращувати сервіс. Дозволити аналітику?
+      </div>
+      <div class="consent-actions">
+        <button class="btn btn-secondary" id="declineAnalytics">Відхилити</button>
+        <button class="btn btn-primary" id="acceptAnalytics">Прийняти</button>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>

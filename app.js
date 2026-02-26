@@ -1,4 +1,6 @@
 const STORAGE_KEY = "variant-generator-data";
+const ANALYTICS_CONSENT_KEY = "ga-consent";
+const GA_MEASUREMENT_ID = "G-1DXE7GYS2M";
 
 const state = {
   lists: [],
@@ -38,6 +40,9 @@ const elements = {
   exportBtn: document.getElementById("exportBtn"),
   toast: document.getElementById("toast"),
   resetStorage: document.getElementById("resetStorage"),
+  consentBanner: document.getElementById("consentBanner"),
+  acceptAnalytics: document.getElementById("acceptAnalytics"),
+  declineAnalytics: document.getElementById("declineAnalytics"),
 };
 
 const StorageService = {
@@ -57,6 +62,79 @@ const StorageService = {
     localStorage.removeItem(STORAGE_KEY);
   },
 };
+
+function loadGoogleAnalytics() {
+  if (window.gtagInitialized) return;
+  const analyticsScriptId = "google-analytics-tag";
+  const initializeAnalytics = () => {
+    if (window.gtagInitialized) return;
+    gtag("js", new Date());
+    gtag("config", GA_MEASUREMENT_ID);
+    window.gtagInitialized = true;
+  };
+
+  const existingScript = document.getElementById(analyticsScriptId);
+  if (existingScript) {
+    if (existingScript.dataset.loaded === "true") {
+      initializeAnalytics();
+    } else {
+      existingScript.addEventListener("load", initializeAnalytics, { once: true });
+    }
+    return;
+  }
+
+  {
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.id = analyticsScriptId;
+    script.addEventListener(
+      "load",
+      () => {
+        script.dataset.loaded = "true";
+        initializeAnalytics();
+      },
+      { once: true }
+    );
+    document.head.appendChild(script);
+  }
+}
+
+function setConsentBannerVisible(isVisible) {
+  if (!elements.consentBanner) return;
+  elements.consentBanner.classList.toggle("show", isVisible);
+}
+
+function getAnalyticsConsent() {
+  try {
+    return localStorage.getItem(ANALYTICS_CONSENT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function setAnalyticsConsent(value) {
+  try {
+    localStorage.setItem(ANALYTICS_CONSENT_KEY, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function applyAnalyticsConsent() {
+  const consent = getAnalyticsConsent();
+  if (consent === "granted") {
+    setConsentBannerVisible(false);
+    loadGoogleAnalytics();
+    return;
+  }
+  if (consent === "denied") {
+    setConsentBannerVisible(false);
+    return;
+  }
+  setConsentBannerVisible(true);
+}
 
 function ensureInstances() {
   if (!state.instances.length) {
@@ -780,6 +858,19 @@ function init() {
 }
 
 function setupEvents() {
+  if (elements.acceptAnalytics && elements.declineAnalytics) {
+    elements.acceptAnalytics.addEventListener("click", () => {
+      setAnalyticsConsent("granted");
+      setConsentBannerVisible(false);
+      loadGoogleAnalytics();
+    });
+
+    elements.declineAnalytics.addEventListener("click", () => {
+      setAnalyticsConsent("denied");
+      setConsentBannerVisible(false);
+    });
+  }
+
   elements.uploadBtn.addEventListener("click", () => elements.fileInput.click());
   elements.fileInput.addEventListener("change", (event) => {
     handleFiles(event.target.files);
@@ -950,3 +1041,4 @@ function setupEvents() {
 
 setupEvents();
 init();
+applyAnalyticsConsent();
