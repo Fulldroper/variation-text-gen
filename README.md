@@ -61,7 +61,7 @@
 
 ## Налагодження Google Analytics
 
-Додайте `?gtag_debug=1` до адреси сторінки, щоб увімкнути debug-mode для Google tag.
+Додайте `?gtag_debug` (або `?gtag_debug=1`) до адреси сторінки, щоб увімкнути debug-mode для Google tag.
 
 ## Приклади файлів
 
