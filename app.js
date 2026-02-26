@@ -2,9 +2,13 @@ const STORAGE_KEY = "variant-generator-data";
 const ANALYTICS_CONSENT_KEY = "ga-consent";
 const GA_MEASUREMENT_ID = "G-1DXE7GYS2M";
 const GA_DEBUG_PARAM = "gtag_debug";
-const GA_DEBUG_MODE = new URLSearchParams(window.location.search).has(
-  GA_DEBUG_PARAM
-);
+let gaDebugMode = null;
+
+function getGaDebugMode() {
+  if (gaDebugMode !== null) return gaDebugMode;
+  gaDebugMode = new URLSearchParams(window.location.search).has(GA_DEBUG_PARAM);
+  return gaDebugMode;
+}
 
 const state = {
   lists: [],
@@ -73,11 +77,8 @@ function loadGoogleAnalytics() {
   const initializeAnalytics = () => {
     if (window.gtagInitialized) return;
     gtag("js", new Date());
-    if (GA_DEBUG_MODE) {
-      gtag("config", GA_MEASUREMENT_ID, { debug_mode: true });
-    } else {
-      gtag("config", GA_MEASUREMENT_ID);
-    }
+    const config = getGaDebugMode() ? { debug_mode: true } : {};
+    gtag("config", GA_MEASUREMENT_ID, config);
     window.gtagInitialized = true;
   };
 
